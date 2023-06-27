@@ -1,0 +1,53 @@
+{
+    "credentials_path": "/home/icirauqui/wErkspace/evaluator/credentials_atlas.json",
+    "work_dir": "/home/icirauqui/wErkspace/evaluator/workdir_gws",
+    "docker_compose_file_path": "/home/icirauqui/wErkspace/qteaviatif/src/weav_db/docker-compose.yml",
+    "mongo_db": {
+        "address": "mongodb://localhost:27017/",
+        "name": "evaluator_topperfloats",
+        "collections": ["agents", "users", "emails", "groups", "products", "functions", "roles"]
+    },
+    "weav_db": {
+        "cluster_url": "http://localhost:8080",
+        "api_key": ""
+    },
+    "email": {
+        "service_provider": [
+            "Select...",
+            "O365",
+            "Google"
+        ],
+        "default_provider": "Google"
+    },
+    "messaging": {
+        "service_provider": [
+            "Select...",
+            "RingCentral",
+            "Otter",
+            "O365",
+            "Google"
+        ],
+        "default_provider": "RingCentral"
+    },
+    "data": {
+        "service_provider": [
+            "Select...",
+            "OneDrive",
+            "GoogleDrive",
+            "Dropbox"
+        ],
+        "default_provider": "GoogleDrive"
+    },
+    "openai": {
+        "oai_models": [
+            "gpt-3.5-turbo",
+            "gpt-3.5-turbo-16k",
+            "gpt-4",
+            "text-davinci-003"
+        ],
+        "default_oai_model": "gpt-3.5-turbo"
+    },
+    "fine-tune": {
+        "model_path": "/home/icirauqui/wErkspace/llm/llama_models/hf/7B"
+    }
+}
