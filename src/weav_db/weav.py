@@ -22,7 +22,7 @@ def check_batch_result(results: dict):
 
 class weav_db:
     def __init__(self, weaviate_url, credentials):
-        connection_retries = 5
+        connection_retries = 10
         while not is_valid_weaviate(weaviate_url) and connection_retries > 0:
             print("Waiting for Weaviate to come online...")
             connection_retries -= 1
@@ -38,6 +38,9 @@ class weav_db:
         )
         self.weaviate_url = weaviate_url
         self.open_ai_api_key = credentials['open_ai_api_key']
+
+    def link_progress_bar(self, progressBar):
+        self.progressBar = progressBar
 
     def class_delete(self, class_name = "Email"):
         try:
@@ -72,7 +75,7 @@ class weav_db:
             pass
 
 
-    def objects_get_pages(self, where = '', properties = ["email_id", "user_id", "body_proc"], class_name = "Email", total_documents = 10):
+    def objects_get_pages_with_additional(self, where = '', properties = ["email_id", "user_id", "body_proc"], class_name = "Email", total_documents = 10):
         limit = 10000
         all_documents = []
         all_vectors = []
@@ -97,25 +100,92 @@ class weav_db:
 
 
 
-    def objects_get(self, where = '', properties = ["email_id", "user_id", "body_proc"], class_name = "Email", limit = 1):
-        import json
-        if where == '':
-            if limit < 0:
-                response = self.client.query.get(class_name, properties).do()
+    def objects_get_pages(self, class_name, properties, total_documents = 10):
+        limit = 10000
+        all_documents = []
+        offset = 0
+
+        self.progressBar.setRange(0, total_documents)
+        self.progressBar.setValue(0)
+        
+        while offset < total_documents:
+            res = (self.client.query.get(class_name, properties)
+                                         .with_limit(limit)
+                                         .with_offset(offset)
+                                         .do())
+            offset += limit
+            try:
+                all_documents.extend([body[properties[0]] for body in res['data']['Get']['Email']])
+            except:
+                print(res)
+            print("Retrieved: ", len(all_documents), "/", total_documents)    
+            self.progressBar.setValue(len(all_documents))
+            self.progressBar.setFormat(f"Retrieved: {len(all_documents)} / {total_documents}")
+
+        return all_documents
+
+
+
+
+    def objects_get(self, class_name, properties, where = '', additional = '', total_documents = 100):
+        if total_documents == 0:
+            total_documents = self.objects_get_count(class_name, where)
+
+        batch_size = 10000
+        all_documents = []
+        all_additional = []
+        offset = 0
+
+        self.progressBar.setRange(0, total_documents)
+        self.progressBar.setValue(0)
+
+        while offset < total_documents:
+
+            if where == '' and additional == '':
+                res = (self.client.query.get(class_name, properties)
+                                            .with_limit(batch_size)
+                                            .with_offset(offset)
+                                            .do())
+            elif where != '' and additional == '':
+                res = (self.client.query.get(class_name, properties)
+                                            .with_limit(batch_size)
+                                            .with_offset(offset)
+                                            .with_where(where)
+                                            .do())
+            elif where == '' and additional != '':
+                res = (self.client.query.get(class_name, properties)
+                                            .with_limit(batch_size)
+                                            .with_offset(offset)
+                                            .with_additional(additional)
+                                            .do())
+            elif where != '' and additional != '':
+                res = (self.client.query.get(class_name, properties)
+                                            .with_limit(batch_size)
+                                            .with_offset(offset)
+                                            .with_where(where)
+                                            .with_additional(additional)
+                                            .do())
             else:
-                response = self.client.query.get(class_name, properties).with_limit(limit).do()
+                offset -= batch_size
+
+            offset += batch_size
+
+            try:
+                all_documents.extend([body[properties[0]] for body in res['data']['Get'][class_name]])
+                if additional != '':
+                    print("checking additional")
+                    all_additional.extend([body['_additional'][additional] for body in res['data']['Get'][class_name]])
+            except Exception as e:
+                print("ERROR: ", e)
+            self.progressBar.setValue(len(all_documents))
+
+        if additional == '':
+            return all_documents
         else:
-            if limit < 0:
-                response = self.client.query.get(class_name, properties).with_where(where).with_additional("vector").do()
-            else:
-                response = self.client.query.get(class_name, properties).with_limit(limit).with_additional("vector").with_where(where).do()
-        #else:
-        #    if limit < 0:
-        #        response = self.client.query.get(class_name, properties).with_where(where).do()
-        #    else:
-        #        response = self.client.query.get(class_name, properties).with_limit(limit).with_where(where).do()
-        return response
-        return json.dumps(response, indent=2)
+            return all_documents, all_additional
+    
+
+
 
     def weav_get_by_user_id(self, user_id, class_name = "Email", limit = 1):
         import json
@@ -141,6 +211,31 @@ class weav_db:
                 .with_where(where)
                 .do()["data"]["Aggregate"][class_name][0]["meta"]["count"])
         return num_items
+
+
+
+
+    def objects_get_count_distinct(self, class_name, field, where = ''):
+        items = self.objects_get(class_name, [field], where, additional='', total_documents=0)
+
+        from collections import Counter
+        counts = Counter(items)
+        
+        #for string, count in counts.items():
+        #    print(f"{string}: {count}")
+        #print(len(counts), len(items))
+            
+        return counts
+
+
+
+
+
+
+
+
+
+
 
     def upload_data(self, class_name, data_objects, data_ids):
         import time 

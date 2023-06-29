@@ -31,7 +31,6 @@ class MyWindow(QMainWindow):
             
         self.weav_host = self.lineEdit_host.text()
         self.weav_key = self.lineEdit_key.text()
-
         self.docker_compose_file_path = self.config['docker_compose_file_path']
 
         self.mongodb = mongo_db(self.config["mongo_db"]["name"], self.config["mongo_db"]["address"])
@@ -50,6 +49,7 @@ class MyWindow(QMainWindow):
             self.pushButton_weav_status.setIcon(QIcon('ui/weav_g.png'))
             self.pushButton_weav_status.setToolTip("Weaviate: Online")
             self.pushButton_weav_refresh.setEnabled(True)
+            self.weavdb.link_progress_bar(self.progressBar)
 
         else:
             self.weavdb = None
@@ -64,12 +64,15 @@ class MyWindow(QMainWindow):
 
         # set pushbutton_weav_refresh to disabled
         self.pushButton_count.clicked.connect(self.weav_count)
+        self.pushButton_count_distinct.clicked.connect(self.weav_count_distinct)
         self.pushButton_schema.clicked.connect(self.weav_schema)
         self.pushButton_schema_add.clicked.connect(self.weav_schema_add)
         self.pushButton_get.clicked.connect(self.weav_get)
         self.pushButton_process.clicked.connect(self.weav_process)
 
         self.pushButton_populate_thread_id.clicked.connect(self.weav_populate_thread_id)
+
+        self.pushButton_mongo_create_threads_collection.clicked.connect(self.mongo_create_threads_collection)
 
 
 
@@ -107,6 +110,7 @@ class MyWindow(QMainWindow):
                     self.pushButton_weav_status.setToolTip("Weaviate: Online")
                     self.pushButton_weav_refresh.setEnabled(True)
                     self.weav_status = True
+                    self.weavdb.link_progress_bar(self.progressBar)
                 else:
                     print("Startup failure")
             else:
@@ -119,16 +123,21 @@ class MyWindow(QMainWindow):
 
     # - Query - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
+    def get_filter(self):
+        filter_where = self.textEdit_filter.toPlainText()
+        filter_class = self.lineEdit_class.text()
+        filter_enable = self.checkBox_filter.isChecked()
+        filter_json = json.loads(filter_where)
+        return filter_class, filter_enable, filter_json
+
+
+
     def weav_count(self):
         if not self.weav_status:
             print("Weaviate is offline")
             return
         
-        filter_where = self.textEdit_filter.toPlainText()
-        filter_class = self.lineEdit_class.text()
-        filter_enable = self.checkBox_filter.isChecked()
-
-        filter_json = json.loads(filter_where)
+        filter_class, filter_enable, filter_json = self.get_filter()
         
         if filter_enable:
             count = self.weavdb.objects_get_count(filter_class, filter_json)
@@ -137,7 +146,22 @@ class MyWindow(QMainWindow):
             count = self.weavdb.objects_get_count(filter_class)
             print("Count no filter: ", count)
 
+    def weav_count_distinct(self):
+        if not self.weav_status:
+            print("Weaviate is offline")
+            return
         
+        filter_class, filter_enable, filter_json = self.get_filter()
+
+        class_to_count = self.lineEdit_class.text()
+        field_to_count = self.lineEdit_field.text()
+
+        count = self.weavdb.objects_get_count_distinct(class_to_count, field_to_count, filter_json)
+        #print("Count distinct: ", count)
+
+        
+
+
     def weav_schema(self):
         if not self.weav_status:
             print("Weaviate is offline")
@@ -248,14 +272,7 @@ class MyWindow(QMainWindow):
         })
 
         from aux.aux import print_progress_bar
-
         from weaviate.util import generate_uuid5
-        
-        #for i in range(len(message_data)):
-        #    print(f"Processing {i} of {len(message_data)}", end="\r")
-        #    uuid = str(message_data[i]['_id'])
-        #    uuid5 = generate_uuid5(uuid)
-        #    self.weavdb.objects_set_property("Email", uuid5, "thread_id", message_data[i]['thread_id'])
 
         self.weavdb.client.batch.configure(
             batch_size=1000,
@@ -268,17 +285,43 @@ class MyWindow(QMainWindow):
                 self.weavdb.objects_set_property("Email", generate_uuid5(message_data[i]['_id']), "thread_id", message_data[i]['thread_id'])
 
 
-            """
-            weaviate_filter = {
-                "path": "thread_id",
-                "operator": "Equal",
-                "valueText": message_data[i]['thread_id']
-            }
-            response = self.weavdb.client.query.get("Email", ["thread_id"]).with_limit(1).with_where(weaviate_filter).with_additional(["id"]).do()
-            print(response)
 
-            input("Press enter to continue")
-            """
+
+    def mongo_create_threads_collection(self):
+
+        users = self.mongodb.find("users", {"active": 1}, {"_id": 1, "email": 1})
+        
+        self.progressBar.setRange(0, len(users))
+        for u, user in enumerate(users):
+            self.progressBar.setValue(u+1)
+            user_id = user['_id']
+            weaviate_user_filter = {
+                "path": "user_id",
+                "operator": "Equal",
+                "valueText": user_id
+            }
+
+            thread_count = {}
+            user_messages = self.mongodb.find("emails", {"user_id": user_id}, {
+                "_id": 1, "thread_id": 1
+            })
+
+            for message in user_messages:
+                if message['thread_id'] not in thread_count:
+                    thread_count[message['thread_id']] = 0
+                thread_count[message['thread_id']] += 1
+
+            for thread_id in thread_count:
+                thread_record = {
+                    "user_id": user_id,
+                    "thread_id": thread_id,
+                    "email_count": thread_count[thread_id],
+                    "email_ids": [],
+                }
+
+                self.mongodb.insert_one("threads", thread_record)
+
+        self.progressBar.setValue(0)
 
 
 if __name__ == "__main__":

@@ -274,6 +274,11 @@ class mongo_db:
                 pass
 
 
+    def distinct(self, collection_name, field, query={}, verbose=False):
+        mydb = self.client[self.database]
+        mycol = mydb[collection_name]
+        return mycol.distinct(field, query)
+
 
 
     # EVALUATOR CUSTOM QUERIES
