@@ -42,7 +42,7 @@ class weav_db:
     def link_progress_bar(self, progressBar):
         self.progressBar = progressBar
 
-    def class_delete(self, class_name = "Email"):
+    def class_delete(self, class_name):
         try:
             self.client.schema.delete_class(class_name)
         except:
@@ -57,6 +57,12 @@ class weav_db:
     def get_schema(self):
         sch = self.client.schema.get()
         return sch
+    
+    def clear_class(self, class_name):
+        all_items, all_additional = self.objects_get(class_name, ["thread_id"], '', ['id'], 0)
+
+        for additional in all_additional:
+            self.client.data_object.delete(uuid=additional['uuid'], class_name=class_name)
     
     def schema_add_property(self, class_name, property):
 
@@ -173,6 +179,7 @@ class weav_db:
 
             offset += batch_size
 
+            #print(res)
             try:
                 all_documents.extend([body[properties[0]] for body in res['data']['Get'][class_name]])
                 if additional != '':

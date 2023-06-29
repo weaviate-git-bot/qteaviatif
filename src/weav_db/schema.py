@@ -71,12 +71,12 @@ schema = {
                     }
                 },
                 {
-                    "name": "email_list",
+                    "name": "emails",
                     "dataType": ["text[]"]
                 },
                 {
-                    "name": "body_proc",
-                    "dataType": ["text"]
+                    "name": "messages",
+                    "dataType": ["text[]"]
                 }
             ],
             "vectorizer": "text2vec-openai",

@@ -70,6 +70,7 @@ class MyWindow(QMainWindow):
         self.pushButton_schema_add_class.clicked.connect(self.weav_schema_add_class)
         self.pushButton_get.clicked.connect(self.weav_get)
         self.pushButton_process.clicked.connect(self.weav_process)
+        self.pushButton_clear_class.clicked.connect(self.weav_clear_class)
 
         self.pushButton_populate_thread_id.clicked.connect(self.weav_populate_thread_id)
 
@@ -203,7 +204,19 @@ class MyWindow(QMainWindow):
         }
         self.weavdb.schema_add_property("Email", property)
 
+
+
+    def weav_clear_class(self):
+        if not self.weav_status:
+            print("Weaviate is offline")
+            return
+
+        filter_class = self.lineEdit_class.text()
+        self.weavdb.clear_class(filter_class)
+        print("Cleared class")
+
     def weav_schema_add_class(self):
+        self.weavdb.class_delete("Thread")
         class_obj = {
             "class": "Thread",
             "description": "Contains a thread_id, list of emails, and a concatenation of email bodies",
@@ -227,12 +240,12 @@ class MyWindow(QMainWindow):
                     }
                 },
                 {
-                    "name": "email_list",
+                    "name": "emails",
                     "dataType": ["text[]"]
                 },
                 {
-                    "name": "body_proc",
-                    "dataType": ["text"]
+                    "name": "messages",
+                    "dataType": ["text[]"]
                 }
             ],
             "vectorizer": "text2vec-openai",
