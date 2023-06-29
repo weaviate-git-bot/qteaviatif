@@ -67,6 +67,7 @@ class MyWindow(QMainWindow):
         self.pushButton_count_distinct.clicked.connect(self.weav_count_distinct)
         self.pushButton_schema.clicked.connect(self.weav_schema)
         self.pushButton_schema_add.clicked.connect(self.weav_schema_add)
+        self.pushButton_schema_add_class.clicked.connect(self.weav_schema_add_class)
         self.pushButton_get.clicked.connect(self.weav_get)
         self.pushButton_process.clicked.connect(self.weav_process)
 
@@ -201,6 +202,51 @@ class MyWindow(QMainWindow):
             }
         }
         self.weavdb.schema_add_property("Email", property)
+
+    def weav_schema_add_class(self):
+        class_obj = {
+            "class": "Thread",
+            "description": "Contains a thread_id, list of emails, and a concatenation of email bodies",
+            "properties": [
+                {
+                    "name": "user_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "thread_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "email_list",
+                    "dataType": ["text[]"]
+                },
+                {
+                    "name": "body_proc",
+                    "dataType": ["text"]
+                }
+            ],
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "text-davinci-003",
+                }
+            }
+        }
+        self.weavdb.schema_add_class(class_obj)
 
 
     def weav_process(self):

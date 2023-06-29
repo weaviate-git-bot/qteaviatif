@@ -342,6 +342,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Mongo cr threads</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton_schema_add_class">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>540</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Add Class</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

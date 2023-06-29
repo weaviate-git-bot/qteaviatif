@@ -63,6 +63,9 @@ class weav_db:
         self.client.schema.property.create(class_name, property)
 
 
+    def schema_add_class(self, class_obj):
+        self.client.schema.create_class(class_obj)
+
 
     def objects_set_property(self, class_name, uuid, property_name, property_value):
         try:
