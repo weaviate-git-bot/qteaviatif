@@ -368,6 +368,19 @@ li.checked::marker { content: &quot;\2612&quot;; }
     <string>Clear Class</string>
    </property>
   </widget>
+  <widget class="QPushButton" name="pushButton_populate_documents">
+   <property name="geometry">
+    <rect>
+     <x>360</x>
+     <y>540</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Populate documents</string>
+   </property>
+  </widget>
  </widget>
  <resources/>
  <connections/>

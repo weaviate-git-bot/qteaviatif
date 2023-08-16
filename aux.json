@@ -1,0 +1,2738 @@
+chema: {
+    "classes": [
+        {
+            "class": "Email",
+            "description": "Contains a preprocessed email body, user_id and email_id",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "model": "ada",
+                "modelVersion": "002",
+                "qna-openai": {
+                    "model": "text-davinci-003"
+                },
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                },
+                "type": "text",
+                "vectorizeClassName": false
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": true,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "user_id",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": true,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "email_id",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "body_proc",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": true,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "thread_id",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_39fc34e3826e4018b155a7a6fcdf23a0",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_d1404eef3ee143ca9887081a555356a4",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_4c911a2c47544f7a9d6f5234e7a66de4",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_fd52f05cbf664c3aafcf805eb135f274",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_f6b918f6ef3b4da69f89ce42a1b591be",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_4c3d2ca13eb340de8a53c8abbb9fd2b9",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "number[]"
+                    ],
+                    "description": "This property was generated by Weaviate's auto-schema feature on Fri Jun 23 16:23:39 2023",
+                    "indexFilterable": true,
+                    "indexSearchable": false,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "vector"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_3b31aa3193d94ffd8166aef1573c0367",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "description": "This property was generated by Weaviate's auto-schema feature on Fri Jun 23 16:33:22 2023",
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "vector_embeddings",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_aa739870ef0f4ef8bcd03c1375f05266",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_d2cd39dc8a6e40d099c996bf70db64de",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_b2a3b269505e4bea8fdb773c2671e1bd",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_e3831911d3ba409db0cf8327ed0a752f",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_8b94fd156c9646808dec9e62d81e1d02",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_200349afaedb44b0bea1f6cb3f599742",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_1218269553784c5b975d49cf0fa42b77",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_aae9d2c2c40f4a27adb057ea0966f4a3",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_30ab182768044811b9d383ff44d5a69c",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_f4a98e02c8494474ab1ac18eaaa787ec",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_b7f6b86053ac45cea9b9d08db59b383b",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_256da903d3cf44119cc0cbd195c784c9",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_773048194bf74bcb96803cc879d98503",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_330c36276a324b5f97b89c79f1f986d6",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_1eb40e066b2a4717be00d63c93ca352c",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_a4ceebb71a544011a8bd719abad95cd4",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_1d13b13eb4d2425a873c6b0cd5cba3ef",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_dc9d2c1a15354635aea01b202a042d7b",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_bb193aaf6aa84b8abfe360e4173f66dc",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_e33c8b12ceb04897b93be20099c26d1c",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_f747024502c24faebd966478e5f4ecc3",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_0036a0edfdd44f688912d93f9dfa30a1",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "LangChain_972577c598554a7790bb978d787579f9",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                }
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "text",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "Thread",
+            "description": "Contains a thread_id, list of emails, and a concatenation of email bodies",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "model": "ada",
+                "modelVersion": "002",
+                "qna-openai": {
+                    "model": "text-davinci-003"
+                },
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                },
+                "type": "text",
+                "vectorizeClassName": false
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": true,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "user_id",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": true,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "thread_id",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text[]"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "emails",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text[]"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "messages",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        },
+        {
+            "class": "EmailBis",
+            "description": "Contains a preprocessed email body, user_id and email_id",
+            "invertedIndexConfig": {
+                "bm25": {
+                    "b": 0.75,
+                    "k1": 1.2
+                },
+                "cleanupIntervalSeconds": 60,
+                "stopwords": {
+                    "additions": null,
+                    "preset": "en",
+                    "removals": null
+                }
+            },
+            "moduleConfig": {
+                "model": "ada",
+                "modelVersion": "002",
+                "qna-openai": {
+                    "model": "text-davinci-003"
+                },
+                "text2vec-openai": {
+                    "model": "ada",
+                    "modelVersion": "002",
+                    "type": "text",
+                    "vectorizeClassName": true
+                },
+                "type": "text",
+                "vectorizeClassName": false
+            },
+            "properties": [
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": true,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "email_id",
+                    "tokenization": "word"
+                },
+                {
+                    "dataType": [
+                        "text"
+                    ],
+                    "indexFilterable": true,
+                    "indexSearchable": true,
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": false,
+                            "vectorizePropertyName": false
+                        }
+                    },
+                    "name": "body_proc",
+                    "tokenization": "word"
+                }
+            ],
+            "replicationConfig": {
+                "factor": 1
+            },
+            "shardingConfig": {
+                "virtualPerPhysical": 128,
+                "desiredCount": 1,
+                "actualCount": 1,
+                "desiredVirtualCount": 128,
+                "actualVirtualCount": 128,
+                "key": "_id",
+                "strategy": "hash",
+                "function": "murmur3"
+            },
+            "vectorIndexConfig": {
+                "skip": false,
+                "cleanupIntervalSeconds": 300,
+                "maxConnections": 64,
+                "efConstruction": 128,
+                "ef": -1,
+                "dynamicEfMin": 100,
+                "dynamicEfMax": 500,
+                "dynamicEfFactor": 8,
+                "vectorCacheMaxObjects": 1000000000000,
+                "flatSearchCutoff": 40000,
+                "distance": "cosine",
+                "pq": {
+                    "enabled": false,
+                    "bitCompression": false,
+                    "segments": 0,
+                    "centroids": 256,
+                    "encoder": {
+                        "type": "kmeans",
+                        "distribution": "log-normal"
+                    }
+                }
+            },
+            "vectorIndexType": "hnsw",
+            "vectorizer": "text2vec-openai"
+        }
+    ]
+}

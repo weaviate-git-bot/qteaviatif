@@ -9,7 +9,19 @@ from mongo_db.mongo import *
 from weav_db.weav import weav_db, is_valid_weaviate, check_batch_result
 from mhandlers.dcompose import start_docker_compose, stop_docker_compose
 
+import pickle
 
+
+def load_pickle(filename):
+    print(f"\nLoad binary: {filename}")
+    with open(filename, 'rb') as f:
+        messages = pickle.load(f)
+    return messages
+
+def save_pickle(data, filename):
+    print(f"\nSave binary: {filename}")
+    with open(filename, 'wb') as f:
+        pickle.dump(data, f)
 
 
 
@@ -22,6 +34,9 @@ class MyWindow(QMainWindow):
         loadUi("ui/main_window.ui", self)  # Load the .ui file
 
         self.setWindowTitle("Weaviate.Dev")
+        
+        app_icon = QIcon('ui/weav_g.png')
+        self.setWindowIcon(app_icon)
 
         with open("ui/config.json") as f:
             self.config = json.load(f)
@@ -73,6 +88,7 @@ class MyWindow(QMainWindow):
         self.pushButton_clear_class.clicked.connect(self.weav_clear_class)
 
         self.pushButton_populate_thread_id.clicked.connect(self.weav_populate_thread_id)
+        self.pushButton_populate_documents.clicked.connect(self.weav_populate_documents)
 
         self.pushButton_mongo_create_threads_collection.clicked.connect(self.mongo_create_threads_collection)
 
@@ -215,51 +231,44 @@ class MyWindow(QMainWindow):
         self.weavdb.clear_class(filter_class)
         print("Cleared class")
 
+
+
     def weav_schema_add_class(self):
-        self.weavdb.class_delete("Thread")
-        class_obj = {
-            "class": "Thread",
-            "description": "Contains a thread_id, list of emails, and a concatenation of email bodies",
-            "properties": [
-                {
-                    "name": "user_id",
-                    "dataType": ["text"],
-                    "moduleConfig": {
-                        "text2vec-openai": {
-                            "skip": True
-                        }
-                    }
-                },
-                {
-                    "name": "thread_id",
-                    "dataType": ["text"],
-                    "moduleConfig": {
-                        "text2vec-openai": {
-                            "skip": True
-                        }
-                    }
-                },
-                {
-                    "name": "emails",
-                    "dataType": ["text[]"]
-                },
-                {
-                    "name": "messages",
-                    "dataType": ["text[]"]
-                }
-            ],
-            "vectorizer": "text2vec-openai",
-            "moduleConfig": {
-                "vectorizeClassName": False,
-                "model": "ada",
-                "modelVersion": "002",
-                "type": "text",
-                "qna-openai": {
-                    "model": "text-davinci-003",
-                }
-            }
-        }
+        if not self.weav_status:
+            print("Weaviate is offline")
+            return
+        
+        class_name = "EmailDocument"
+
+        question = f"Attempt to delete the class '{class_name}'?"
+        reply = QMessageBox.question(self, 'Message', question, QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            self.weavdb.class_delete(class_name)
+            print("Deleted class")
+
+        from weav_db.schema import schema
+        class_obj = None
+        for weav_class in schema['classes']:
+            if weav_class['class'] == class_name:
+                class_obj = weav_class
+                break
+        if class_obj == None:
+            print(f"Class {class_name} not found")
+            return
+        
+        #Print json
+        print(json.dumps(class_obj, indent=2))
+
+        # Qt alert box for confirmation
+        question = f"Are you sure you want to add the class '{class_name}'?"
+        reply = QMessageBox.question(self, 'Message', question, QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.No:
+            return
+        
+        print("Done")
         self.weavdb.schema_add_class(class_obj)
+
+
 
 
     def weav_process(self):
@@ -345,6 +354,163 @@ class MyWindow(QMainWindow):
 
 
 
+    def weav_populate_documents_chunkify(self):
+
+        print("Populate documents")
+
+        import os
+        # List documents in '../data/pdf'
+        pdf_dir = "../data/pdf"
+        pdfs = [os.path.join(pdf_dir, f) for f in os.listdir(pdf_dir) if os.path.isfile(os.path.join(pdf_dir, f))]
+        #for pdf in pdfs:
+        #    print(pdf)
+
+        import pickle
+        metadatas = load_pickle("../data/pdf/metadata.pickle")
+
+        import time
+                
+        from aux.aux import print_progress_bar
+        from weaviate.util import generate_uuid5
+
+
+        from langchain.document_loaders import PyPDFLoader 
+        from langchain.document_loaders import Docx2txtLoader
+        from langchain.document_loaders import TextLoader
+        from langchain.text_splitter import CharacterTextSplitter
+
+
+        count_files = 0
+
+        text_splitter = CharacterTextSplitter(chunk_size=4000, chunk_overlap=200)
+        prepath = "../data/pdf/"
+        self.progressBar.setRange(0, len(metadatas))
+        for i, metadata in enumerate(metadatas):
+            #print_progress_bar(0, int(100*(i+1)/len(metadatas)), message=f"Processing {i+1} of {len(metadatas)}. Current count {count_files}")
+            self.progressBar.setValue(i+1)
+            filename = prepath + metadata['file_name']
+
+            try:
+                if ".pdf" in filename.lower():
+                    loader = PyPDFLoader(filename)
+                elif ".docx" in filename.lower():
+                    loader = Docx2txtLoader(filename)
+                elif ".txt" in filename.lower():
+                    loader = TextLoader(filename)
+                else:
+                    print("  File type not supported")
+                    continue
+
+
+                documents = loader.load()
+                chunks = text_splitter.split_documents(documents)
+
+
+                document = ""
+                for chunk in chunks:
+                    clean_chunk = chunk.page_content.replace("\n", " ")
+                    document += clean_chunk + "\n"
+                chunks = text_splitter.split_text(document)
+                metadatas[i]['chunks'] = chunks
+
+                print(f"Filename {filename} has {len(chunks)} chunks")
+            except:
+                print(f"  Error loading file {filename}")
+                continue
+
+
+        save_pickle(metadatas, "../data/pdf/metadata_chunks.pickle")
+
+
+    def weav_populate_documents(self):
+        metadatas = load_pickle("../data/pdf/metadata_chunks.pickle")
+
+
+        from langchain.text_splitter import CharacterTextSplitter
+        text_splitter = CharacterTextSplitter(chunk_size=4000, chunk_overlap=200)
+
+        import time
+        from aux.aux import print_progress_bar
+
+        #for metadata in metadatas:
+        #    if 'chunks' not in metadata or len(metadata['chunks']) == 0:
+        #        print("  No chunks")
+        #        continue
+        #    print(metadata['file_name'])
+        #    print(metadata['attachment_id'])
+        #    print(metadata['email_id'])
+        #    print(metadata['user_id'])
+        #    print(metadata['thread_id'])
+        #    print(metadata['user_email'])
+        #    print(len(metadata['chunks']))
+        #    print()
+        #    document = ""
+        #    for chunk in metadata['chunks']:
+        #        clean_chunk = chunk.page_content.replace("\n", " ")
+        #        document += clean_chunk + "\n"
+        #
+        #    print(document)
+        #    chunks = text_splitter.split_text(document)
+        #    print(len(chunks))
+        #    
+        #    print()
+        #    input("Press Enter to continue...")
+
+        #metadata_example = {
+        #    "email_id": email_id,
+        #    "user_id": user_id,
+        #    "thread_id": thread_id,
+        #    "user_email": user_email,
+        #    "attachment_id": body['attachmentId'],
+        #    "file_name": save_file_name
+        #}
+        
+        weav_class = "EmailDocument"
+
+        self.progressBar.setRange(0, len(metadatas))
+
+        with self.weavdb.client.batch(
+            batch_size=1,
+            num_workers=1,
+            dynamic=True,
+            timeout_retries=5,
+            connection_error_retries=5,
+            callback=check_batch_result
+        ) as batch:
+            for d, metadata in enumerate(metadatas):
+                #print_progress_bar(0, int(100*(d+1)/len(metadatas)), message=f"Processing {d+1} of {len(metadatas)}")
+                self.progressBar.setValue(d+1)
+
+                if 'chunks' not in metadata or len(metadata['chunks']) == 0:
+                    print("  No chunks")
+                    continue
+                else:
+                    print(f"  Processing {d+1} of {len(metadatas)}: {len(metadata['chunks'])} chunks")
+
+                document = ""
+                for chunk in metadata['chunks']:
+                    clean_chunk = chunk.page_content.replace("\n", " ")
+                    document += clean_chunk + "\n"
+                chunks = text_splitter.split_text(document)
+
+
+                for chunk in chunks:
+                    data_object = {
+                        "email_id": metadata['email_id'],
+                        "user_id": metadata['user_id'],
+                        "thread_id": metadata['thread_id'],
+                        "user_email": metadata['user_email'],
+                        "document_file_name": metadata['file_name'],
+                        "document_id": metadata['attachment_id'],
+                        "data": chunk,
+                    }
+                    batch.add_data_object(
+                        data_object,
+                        class_name=weav_class,
+                    )
+                    time.sleep(0.015)
+        print()
+
 
     def mongo_create_threads_collection(self):
 
@@ -386,5 +552,15 @@ class MyWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MyWindow()
+
+
+    #window.setWindowFlags(Qt.Window)
+    #app_icon = QIcon('ui/weav_g.png')
+    #app.setWindowIcon(app_icon)
+    #window.setIconSize(QSize(35, 35))
+    #window.set_icon = app_icon
+
+
+
     window.show()
     sys.exit(app.exec_())
