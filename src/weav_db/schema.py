@@ -186,10 +186,20 @@ schema = {
                 }
             }
         },
+
         {
             "class": "EmailDocument",
             "description": "Contains pdf or docx documents",
             "properties": [
+                {
+                    "name": "template",
+                    "dataType": ["boolean"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
                 {
                     "name": "email_id",
                     "dataType": ["text"],

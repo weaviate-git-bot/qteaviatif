@@ -89,6 +89,7 @@ class MyWindow(QMainWindow):
 
         self.pushButton_populate_thread_id.clicked.connect(self.weav_populate_thread_id)
         self.pushButton_populate_documents.clicked.connect(self.weav_populate_documents)
+        self.pushButton_populate_templates.clicked.connect(self.weav_populate_templates)
 
         self.pushButton_mongo_create_threads_collection.clicked.connect(self.mongo_create_threads_collection)
 
@@ -270,7 +271,6 @@ class MyWindow(QMainWindow):
 
 
 
-
     def weav_process(self):
         import os
         from langchain.embeddings import OpenAIEmbeddings
@@ -355,7 +355,7 @@ class MyWindow(QMainWindow):
 
 
     def weav_populate_documents_chunkify(self):
-
+    
         print("Populate documents")
 
         import os
@@ -496,6 +496,7 @@ class MyWindow(QMainWindow):
 
                 for chunk in chunks:
                     data_object = {
+                        "template": False,
                         "email_id": metadata['email_id'],
                         "user_id": metadata['user_id'],
                         "thread_id": metadata['thread_id'],
@@ -510,6 +511,147 @@ class MyWindow(QMainWindow):
                     )
                     time.sleep(0.015)
         print()
+
+
+
+
+
+
+
+    def weav_populate_templates(self):
+    
+        print("Populate templates")
+
+        import os
+        # List documents in '../data/pdf'
+        pdf_dir = "../data/templates"
+        pdfs = [os.path.join(pdf_dir, f) for f in os.listdir(pdf_dir) if os.path.isfile(os.path.join(pdf_dir, f))]
+        #for pdf in pdfs:
+        #    print(pdf)
+
+
+        import time
+                
+        from aux.aux import print_progress_bar
+        from weaviate.util import generate_uuid5
+
+
+        from langchain.document_loaders import PyPDFLoader 
+        from langchain.document_loaders import Docx2txtLoader
+        from langchain.document_loaders import TextLoader
+        from langchain.text_splitter import CharacterTextSplitter
+
+
+
+        text_splitter = CharacterTextSplitter(chunk_size=8000, chunk_overlap=200)
+        prepath = "../data/templates/"
+
+        files_in_prepath = [f for f in os.listdir(prepath) if (os.path.isfile(os.path.join(prepath, f)) and f.lower()[-7:] != '.pickle')]
+
+        metadatas = []
+
+
+        self.progressBar.setRange(0, len(files_in_prepath))
+        for i, filename in enumerate(files_in_prepath):
+            self.progressBar.setValue(i+1)
+            filename = prepath + filename
+
+            try:
+                if filename.lower().endswith('.pdf'):
+                    loader = PyPDFLoader(filename)
+                elif filename.lower().endswith('.docx'):
+                    loader = Docx2txtLoader(filename)
+                elif filename.lower().endswith('.txt'):
+                    loader = TextLoader(filename)
+                else:
+                    print("  File type not supported")
+                    continue
+
+
+                documents = loader.load()
+                chunks = text_splitter.split_documents(documents)
+
+
+                document = ""
+                for chunk in chunks:
+                    clean_chunk = chunk.page_content.replace("\n", " ")
+                    document += clean_chunk + "\n"
+                print("Document lenght:", len(document))
+                chunks2 = text_splitter.split_text(document)
+
+                metadata = {
+                    "file_name": filename,
+                    "chunks": chunks2
+                }
+                metadatas.append(metadata)
+
+                print(f"Filename {filename} has {len(chunks)} chunks and {len(chunks2)} chunks2")
+            except:
+                print(f"  Error loading file {filename}")
+                continue
+
+   
+        save_pickle(metadatas, "../data/templates/metadata_chunks.pickle")
+
+        
+
+        import time
+
+
+        weav_class = "EmailDocument"
+
+        #metadatas.append({
+        #    "file_name": "void",
+        #    "chunks": ["aaa"]
+        #})
+
+        self.progressBar.setRange(0, len(metadatas))
+
+        # WARNING: Weaviate fails to upload the last document in the batch
+
+
+        with self.weavdb.client.batch(
+            batch_size=20,
+            num_workers=10,
+            dynamic=True,
+            timeout_retries=5,
+            connection_error_retries=5,
+            callback=check_batch_result
+        ) as batch:
+            for d, metadata in enumerate(metadatas):
+                #print_progress_bar(0, int(100*(d+1)/len(metadatas)), message=f"Processing {d+1} of {len(metadatas)}")
+                self.progressBar.setValue(d+1)
+
+                if 'chunks' not in metadata or len(metadata['chunks']) == 0:
+                    print("  No chunks")
+                    continue
+                else:
+                    print(f"  Processing {d+1} of {len(metadatas)}: {len(metadata['chunks'])} chunks")
+
+
+                for chunk in metadata['chunks']:
+                    print(f"Add chunk for {metadata['file_name']}")
+
+                    #print()
+                    #print("Chunk")
+                    #print(chunk)
+                    #print()
+
+                    data_object = {
+                        "template": True,
+                        "document_file_name": metadata['file_name'],
+                        "data": chunk,
+                    }
+                    batch.add_data_object(
+                        data_object,
+                        class_name=weav_class,
+                    )
+                    time.sleep(0.015)
+        print()
+
+
+
+
 
 
     def mongo_create_threads_collection(self):
