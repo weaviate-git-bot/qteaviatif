@@ -354,131 +354,77 @@ class MyWindow(QMainWindow):
 
 
 
-    def weav_populate_documents_chunkify(self):
+    def weav_populate_documents(self):
     
         print("Populate documents")
+        weav_class = "EmailDocument"
 
         import os
-        # List documents in '../data/pdf'
-        pdf_dir = "../data/pdf"
-        pdfs = [os.path.join(pdf_dir, f) for f in os.listdir(pdf_dir) if os.path.isfile(os.path.join(pdf_dir, f))]
-        #for pdf in pdfs:
-        #    print(pdf)
-
-        import pickle
-        metadatas = load_pickle("../data/pdf/metadata.pickle")
-
         import time
-                
-        from aux.aux import print_progress_bar
-        from weaviate.util import generate_uuid5
-
-
         from langchain.document_loaders import PyPDFLoader 
         from langchain.document_loaders import Docx2txtLoader
         from langchain.document_loaders import TextLoader
         from langchain.text_splitter import CharacterTextSplitter
 
+        pdf_dir = "../data/pdf"
+        pdfs = [os.path.join(pdf_dir, f) for f in os.listdir(pdf_dir) if os.path.isfile(os.path.join(pdf_dir, f))]
 
-        count_files = 0
-
-        text_splitter = CharacterTextSplitter(chunk_size=4000, chunk_overlap=200)
-        prepath = "../data/pdf/"
-        self.progressBar.setRange(0, len(metadatas))
-        for i, metadata in enumerate(metadatas):
-            #print_progress_bar(0, int(100*(i+1)/len(metadatas)), message=f"Processing {i+1} of {len(metadatas)}. Current count {count_files}")
-            self.progressBar.setValue(i+1)
-            filename = prepath + metadata['file_name']
-
-            try:
-                if ".pdf" in filename.lower():
-                    loader = PyPDFLoader(filename)
-                elif ".docx" in filename.lower():
-                    loader = Docx2txtLoader(filename)
-                elif ".txt" in filename.lower():
-                    loader = TextLoader(filename)
-                else:
-                    print("  File type not supported")
-                    continue
-
-
-                documents = loader.load()
-                chunks = text_splitter.split_documents(documents)
-
-
-                document = ""
-                for chunk in chunks:
-                    clean_chunk = chunk.page_content.replace("\n", " ")
-                    document += clean_chunk + "\n"
-                chunks = text_splitter.split_text(document)
-                metadatas[i]['chunks'] = chunks
-
-                print(f"Filename {filename} has {len(chunks)} chunks")
-            except:
-                print(f"  Error loading file {filename}")
-                continue
-
-
-        save_pickle(metadatas, "../data/pdf/metadata_chunks.pickle")
-
-
-    def weav_populate_documents(self):
-        metadatas = load_pickle("../data/pdf/metadata_chunks.pickle")
-
-
-        from langchain.text_splitter import CharacterTextSplitter
-        text_splitter = CharacterTextSplitter(chunk_size=4000, chunk_overlap=200)
-
-        import time
-        from aux.aux import print_progress_bar
-
-        #for metadata in metadatas:
-        #    if 'chunks' not in metadata or len(metadata['chunks']) == 0:
-        #        print("  No chunks")
-        #        continue
-        #    print(metadata['file_name'])
-        #    print(metadata['attachment_id'])
-        #    print(metadata['email_id'])
-        #    print(metadata['user_id'])
-        #    print(metadata['thread_id'])
-        #    print(metadata['user_email'])
-        #    print(len(metadata['chunks']))
-        #    print()
-        #    document = ""
-        #    for chunk in metadata['chunks']:
-        #        clean_chunk = chunk.page_content.replace("\n", " ")
-        #        document += clean_chunk + "\n"
-        #
-        #    print(document)
-        #    chunks = text_splitter.split_text(document)
-        #    print(len(chunks))
-        #    
-        #    print()
-        #    input("Press Enter to continue...")
-
-        #metadata_example = {
-        #    "email_id": email_id,
-        #    "user_id": user_id,
-        #    "thread_id": thread_id,
-        #    "user_email": user_email,
-        #    "attachment_id": body['attachmentId'],
-        #    "file_name": save_file_name
-        #}
         
-        weav_class = "EmailDocument"
+#        metadatas = load_pickle("../data/pdf/metadata.pickle")
+#
+#        text_splitter = CharacterTextSplitter(
+#            chunk_size=8000, 
+#            chunk_overlap=200, 
+#            separator="\n"
+#        )
+#        prepath = "../data/pdf/"
+#        self.progressBar.setRange(0, len(metadatas))
+#        for i, metadata in enumerate(metadatas):
+#            self.progressBar.setValue(i+1)
+#            filename = prepath + metadata['file_name']
+#
+#            try:
+#                if filename.lower().endswith('.pdf'):
+#                    loader = PyPDFLoader(filename)
+#                elif filename.lower().endswith('.docx'):
+#                    loader = Docx2txtLoader(filename)
+#                elif filename.lower().endswith('.txt'):
+#                    loader = TextLoader(filename)
+#                else:
+#                    print("  File type not supported")
+#                    continue
+#
+#                documents = loader.load()
+#                chunks = text_splitter.split_documents(documents)
+#
+#                document = ""
+#                for chunk in chunks:
+#                    clean_chunk = chunk.page_content.replace("\n", " ")
+#                    document += clean_chunk + "\n"
+#                text_chunks = text_splitter.split_text(document)
+#                metadatas[i]['chunks'] = text_chunks
+#
+#                print(f"Filename {filename} has length {len(document)} in {len(chunks)} chunks and {len(text_chunks)} chunks2")
+#            except:
+#                print(f"  Error loading file {filename}")
+#                continue
+#
+#
+#        save_pickle(metadatas, "../data/pdf/metadata_chunks.pickle")
+
+        metadatas = load_pickle("../data/pdf/metadata_chunks.pickle")
 
         self.progressBar.setRange(0, len(metadatas))
 
         with self.weavdb.client.batch(
-            batch_size=1,
-            num_workers=1,
+            batch_size=20,
+            num_workers=10,
             dynamic=True,
             timeout_retries=5,
             connection_error_retries=5,
             callback=check_batch_result
         ) as batch:
             for d, metadata in enumerate(metadatas):
-                #print_progress_bar(0, int(100*(d+1)/len(metadatas)), message=f"Processing {d+1} of {len(metadatas)}")
                 self.progressBar.setValue(d+1)
 
                 if 'chunks' not in metadata or len(metadata['chunks']) == 0:
@@ -487,14 +433,7 @@ class MyWindow(QMainWindow):
                 else:
                     print(f"  Processing {d+1} of {len(metadatas)}: {len(metadata['chunks'])} chunks")
 
-                document = ""
                 for chunk in metadata['chunks']:
-                    clean_chunk = chunk.page_content.replace("\n", " ")
-                    document += clean_chunk + "\n"
-                chunks = text_splitter.split_text(document)
-
-
-                for chunk in chunks:
                     data_object = {
                         "template": False,
                         "email_id": metadata['email_id'],
@@ -531,11 +470,6 @@ class MyWindow(QMainWindow):
 
 
         import time
-                
-        from aux.aux import print_progress_bar
-        from weaviate.util import generate_uuid5
-
-
         from langchain.document_loaders import PyPDFLoader 
         from langchain.document_loaders import Docx2txtLoader
         from langchain.document_loaders import TextLoader
@@ -543,7 +477,11 @@ class MyWindow(QMainWindow):
 
 
 
-        text_splitter = CharacterTextSplitter(chunk_size=8000, chunk_overlap=200)
+        text_splitter = CharacterTextSplitter(
+            chunk_size=8000, 
+            chunk_overlap=200, 
+            separator="\n"
+        )
         prepath = "../data/templates/"
 
         files_in_prepath = [f for f in os.listdir(prepath) if (os.path.isfile(os.path.join(prepath, f)) and f.lower()[-7:] != '.pickle')]
