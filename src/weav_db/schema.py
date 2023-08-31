@@ -298,6 +298,168 @@ schema = {
                     "model": "text-davinci-003",
                 }
             }
+        },
+        {
+            "class": "EmailUserSent",
+            "description": "Contains emails sent by a user",
+            "properties": [
+                {
+                    "name": "user_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "body_proc",
+                    "dataType": ["text"],
+                }
+            ],
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "text-davinci-003",
+                }
+            }
+        },
+        {
+            "class": "EmailUserReceived",
+            "description": "Contains emaisl received by a user",
+            "properties": [
+                {
+                    "name": "user_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "body_proc",
+                    "dataType": ["text"],
+                }
+            ],
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "text-davinci-003",
+                }
+            }
+        },
+        {
+            "class": "EmailAdjMatrix",
+            "description": "Contains emaisl received by a user",
+            "properties": [
+                {
+                    "name": "user_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "body_proc",
+                    "dataType": ["text"],
+                }
+            ],
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "text-davinci-003",
+                }
+            }
+        },
+        {
+            "class": "Email1on1Conversation",
+            "description": "Contains a conversation between 2 people",
+            "properties": [
+                {
+                    "name": "sender_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "receiver_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "body_proc",
+                    "dataType": ["text"],
+                }
+            ],
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "text-davinci-003",
+                }
+            }
+        },
+        {
+            "class": "EmailGroupConversation",
+            "description": "Contains a conversation between a group people",
+            "properties": [
+                {
+                    "name": "conversation_id",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },{
+                    "name": "members",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
+                    "name": "body_proc",
+                    "dataType": ["text"],
+                }
+            ],
+            "vectorizer": "text2vec-openai",
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "text-davinci-003",
+                }
+            }
         }
     ]
 }

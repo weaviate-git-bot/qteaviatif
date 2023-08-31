@@ -104,7 +104,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>EmailDocument</string>
+    <string/>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_count">

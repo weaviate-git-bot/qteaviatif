@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTextEdit, QTableWidgetItem, QMessageBox
+from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTextEdit, QTableWidgetItem, QMessageBox, QInputDialog
 from PyQt5.QtCore import QTextStream, Qt, QTimer, QThread, pyqtSignal, QSize
 from PyQt5.QtGui import QTextCursor, QIcon
 from PyQt5.uic import loadUi
@@ -236,29 +236,29 @@ class MyWindow(QMainWindow):
 
     def weav_schema_add_class(self):
         if not self.weav_status:
-            print("Weaviate is offline")
+            QMessageBox.critical(self, 'Error', "Weaviate is offline", QMessageBox.Ok)
             return
         
-        class_name = "EmailDocument"
+        from weav_db.schema import schema
+        
+        classes = []
+        class_objects = {}
+        for weav_class in schema['classes']:
+            classes.append(weav_class['class'])
+            class_objects[weav_class['class']] = weav_class
+
+        # Select class in an alert box that lists all classes
+        class_name, ok = QInputDialog.getItem(self, "Select class", "Class:", classes, 0, False)
+        class_obj = class_objects[class_name]
 
         question = f"Attempt to delete the class '{class_name}'?"
         reply = QMessageBox.question(self, 'Message', question, QMessageBox.Yes, QMessageBox.No)
         if reply == QMessageBox.Yes:
             self.weavdb.class_delete(class_name)
-            print("Deleted class")
+            QMessageBox.information(self, 'Message', f"Class '{class_name}' deleted", QMessageBox.Ok)
 
-        from weav_db.schema import schema
-        class_obj = None
-        for weav_class in schema['classes']:
-            if weav_class['class'] == class_name:
-                class_obj = weav_class
-                break
-        if class_obj == None:
-            print(f"Class {class_name} not found")
-            return
-        
         #Print json
-        print(json.dumps(class_obj, indent=2))
+        #print(json.dumps(class_obj, indent=2))
 
         # Qt alert box for confirmation
         question = f"Are you sure you want to add the class '{class_name}'?"
@@ -266,8 +266,8 @@ class MyWindow(QMainWindow):
         if reply == QMessageBox.No:
             return
         
-        print("Done")
         self.weavdb.schema_add_class(class_obj)
+        QMessageBox.information(self, 'Message', f"Class '{class_name}' added", QMessageBox.Ok)
 
 
 
