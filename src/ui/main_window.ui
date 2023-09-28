@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>670</width>
-    <height>710</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -111,7 +111,7 @@
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>490</y>
+     <y>580</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -278,7 +278,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>670</y>
+     <y>760</y>
      <width>631</width>
      <height>23</height>
     </rect>
@@ -294,7 +294,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>540</y>
+     <y>630</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -333,7 +333,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>20</x>
-     <y>610</y>
+     <y>700</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -359,7 +359,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>190</x>
-     <y>590</y>
+     <y>660</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -372,7 +372,7 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>610</y>
+     <y>590</y>
      <width>161</width>
      <height>41</height>
     </rect>
@@ -385,13 +385,52 @@ li.checked::marker { content: &quot;\2612&quot;; }
    <property name="geometry">
     <rect>
      <x>360</x>
-     <y>560</y>
+     <y>540</y>
      <width>161</width>
      <height>41</height>
     </rect>
    </property>
    <property name="text">
     <string>Populate templates</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_schema_reset_classes">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>580</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset Classes</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_schema_mod">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>490</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Modify Schema</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton_schema_reset_classes_bkp">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>620</y>
+     <width>161</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Reset Classes Bkp</string>
    </property>
   </widget>
  </widget>

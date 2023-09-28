@@ -81,8 +81,11 @@ class MyWindow(QMainWindow):
         self.pushButton_count.clicked.connect(self.weav_count)
         self.pushButton_count_distinct.clicked.connect(self.weav_count_distinct)
         self.pushButton_schema.clicked.connect(self.weav_schema)
+        self.pushButton_schema_mod.clicked.connect(self.weav_schema_mod)
         self.pushButton_schema_add.clicked.connect(self.weav_schema_add)
         self.pushButton_schema_add_class.clicked.connect(self.weav_schema_add_class)
+        self.pushButton_schema_reset_classes.clicked.connect(self.weav_schema_reset_classes)
+        self.pushButton_schema_reset_classes_bkp.clicked.connect(self.weav_schema_reset_classes_bkp)
         self.pushButton_get.clicked.connect(self.weav_get)
         self.pushButton_process.clicked.connect(self.weav_process)
         self.pushButton_clear_class.clicked.connect(self.weav_clear_class)
@@ -92,6 +95,10 @@ class MyWindow(QMainWindow):
         self.pushButton_populate_templates.clicked.connect(self.weav_populate_templates)
 
         self.pushButton_mongo_create_threads_collection.clicked.connect(self.mongo_create_threads_collection)
+
+        # Print weaviate version
+        #if self.weav_status:
+        #    self.weavdb.print_version()
 
 
 
@@ -156,9 +163,24 @@ class MyWindow(QMainWindow):
             print("Weaviate is offline")
             return
         
-        filter_class, filter_enable, filter_json = self.get_filter()
+
+        filter_enable = self.checkBox_filter.isChecked()
+        filter_class = self.lineEdit_class.text()
+        
+        print("Filter enable: ", filter_enable)
+        
         
         if filter_enable:
+            filter_where = self.textEdit_filter.toPlainText()
+
+            print("Filter where: ", filter_where)
+
+            filter_json = json.loads(filter_where)
+
+            print("Filter json: ", filter_json)
+
+
+
             count = self.weavdb.objects_get_count(filter_class, filter_json)
             print("Count filter: ", count)
         else:
@@ -208,6 +230,27 @@ class MyWindow(QMainWindow):
         print("Email bodies retrieved: ", len(self.email_bodies))
         print("Email vectors retrieved: ", len(self.email_vectors))
 
+
+    def weav_schema_mod(self):
+        if not self.weav_status:
+            print("Weaviate is offline")
+            return
+        
+        schema_config = {
+            "moduleConfig": {
+                "vectorizeClassName": False,
+                "model": "ada",
+                "modelVersion": "002",
+                "type": "text",
+                "qna-openai": {
+                    "model": "gpt-3.5-turbo-16k",
+                }
+            }
+        }
+
+        print("Before update schema")
+        self.weavdb.mod_schema_properties("Email1on1Conversation", schema_config)
+        print("After update schema")
 
     def weav_schema_add(self):
         property = {
@@ -268,6 +311,109 @@ class MyWindow(QMainWindow):
         
         self.weavdb.schema_add_class(class_obj)
         QMessageBox.information(self, 'Message', f"Class '{class_name}' added", QMessageBox.Ok)
+
+
+
+
+
+    def weav_schema_reset_classes(self):
+        if not self.weav_status:
+            QMessageBox.critical(self, 'Error', "Weaviate is offline", QMessageBox.Ok)
+            return
+        
+        from weav_db.schema import schema
+        
+        classes = []
+        class_objects = {}
+        for weav_class in schema['classes']:
+            classes.append(weav_class['class'])
+            class_objects[weav_class['class']] = weav_class
+
+
+        from aux_widgets import show_multi_select_dialog
+        #class_names = show_multi_select_dialog(classes)
+        class_names = [
+        "EmailUserSent",
+        "EmailUserReceived",
+        "EmailUser",
+        "Email",
+        "Email1on1Conversation",
+        "EmailAdjMatrix",
+        "Email1on1"
+        ]
+
+
+        
+        question = f"Reset classes '{class_names}'?"
+        reply = QMessageBox.question(self, 'Message', question, QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.No:
+            return
+
+        for class_name in class_names:
+            class_obj = class_objects[class_name]
+            if reply == QMessageBox.Yes:
+                try:
+                    self.weavdb.class_delete(class_name)
+                except:
+                    print(f"Error deleting class {class_name}")
+                try:
+                    self.weavdb.schema_add_class(class_obj)
+                except:
+                    print(f"Error adding class {class_name}")
+
+
+        QMessageBox.information(self, 'Message', f"Done resetting classes: '{class_names}'", QMessageBox.Ok)
+
+
+
+    def weav_schema_reset_classes_bkp(self):
+        if not self.weav_status:
+            QMessageBox.critical(self, 'Error', "Weaviate is offline", QMessageBox.Ok)
+            return
+        
+        from weav_db.schema import schema
+        
+        classes = []
+        class_objects = {}
+        for weav_class in schema['classes']:
+            classes.append(weav_class['class'])
+            class_objects[weav_class['class']] = weav_class
+
+
+        from aux_widgets import show_multi_select_dialog
+        #class_names = show_multi_select_dialog(classes)
+        class_names = [
+        "EmailUserSentBkp",
+        "EmailUserReceivedBkp",
+        "EmailUserBkp",
+        "EmailBkp",
+        "Email1on1ConversationBkp",
+        "EmailAdjMatrixBkp",
+        "Email1on1Bkp"
+        ]
+
+
+        
+        question = f"Reset classes '{class_names}'?"
+        reply = QMessageBox.question(self, 'Message', question, QMessageBox.Yes, QMessageBox.No)
+        if reply == QMessageBox.No:
+            return
+
+        for class_name in class_names:
+            class_obj = class_objects[class_name]
+            if reply == QMessageBox.Yes:
+                try:
+                    self.weavdb.class_delete(class_name)
+                except:
+                    print(f"Error deleting class {class_name}")
+                try:
+                    self.weavdb.schema_add_class(class_obj)
+                except:
+                    print(f"Error adding class {class_name}")
+
+
+        QMessageBox.information(self, 'Message', f"Done resetting classes: '{class_names}'", QMessageBox.Ok)
+
 
 
 

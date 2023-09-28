@@ -39,6 +39,10 @@ class weav_db:
         self.weaviate_url = weaviate_url
         self.open_ai_api_key = credentials['open_ai_api_key']
 
+    #def print_version(self):
+    #    print(self.client.meta.get())
+
+
     def link_progress_bar(self, progressBar):
         self.progressBar = progressBar
 
@@ -57,6 +61,9 @@ class weav_db:
     def get_schema(self):
         sch = self.client.schema.get()
         return sch
+    
+    def mod_schema_properties(self, class_name, schema_config):
+        self.client.schema.update_config(class_name, schema_config)
     
     def clear_class(self, class_name):
         all_items, all_additional = self.objects_get(class_name, ["thread_id"], '', ['id'], 0)
