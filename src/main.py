@@ -3,6 +3,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QFileDialog, QTextEdit, Q
 from PyQt5.QtCore import QTextStream, Qt, QTimer, QThread, pyqtSignal, QSize
 from PyQt5.QtGui import QTextCursor, QIcon
 from PyQt5.uic import loadUi
+import io
 import json
 
 from mongo_db.mongo import *
@@ -24,6 +25,25 @@ def save_pickle(data, filename):
         pickle.dump(data, f)
 
 
+class TextRedirector(io.TextIOBase):
+    def __init__(self, text_widget):
+        self.text_widget = text_widget
+
+    def write(self, s):
+        self.text_widget.moveCursor(QTextCursor.End)
+        self.text_widget.insertPlainText(s)
+
+    def flush(self):
+        pass
+
+def schema_classes():
+    from weav_db.schema import schema
+    classes = []
+    for weav_class in schema['classes']:
+        classes.append(weav_class['class'])
+    return classes
+
+
 
 class MyWindow(QMainWindow):
     
@@ -32,6 +52,10 @@ class MyWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         loadUi("ui/main_window.ui", self)  # Load the .ui file
+
+        # Set output to textEdit_log
+        sys.stdout = TextRedirector(self.textEdit_log)
+        sys.stderr = TextRedirector(self.textEdit_log)
 
         self.setWindowTitle("Weaviate.Dev")
         
@@ -65,6 +89,15 @@ class MyWindow(QMainWindow):
             self.pushButton_weav_status.setToolTip("Weaviate: Online")
             self.pushButton_weav_refresh.setEnabled(True)
             self.weavdb.link_progress_bar(self.progressBar)
+
+            classes = schema_classes()
+            db_classes = self.db_schema_classes()
+            classes_intersect = []
+            for cls in db_classes:
+                if cls in classes:
+                    classes_intersect.append(cls)
+            self.comboBox_class.addItems(classes_intersect)
+            
 
         else:
             self.weavdb = None
@@ -137,6 +170,14 @@ class MyWindow(QMainWindow):
                     self.pushButton_weav_refresh.setEnabled(True)
                     self.weav_status = True
                     self.weavdb.link_progress_bar(self.progressBar)
+
+                    classes = schema_classes()
+                    db_classes = self.db_schema_classes()
+                    classes_intersect = []
+                    for cls in db_classes:
+                        if cls in classes:
+                            classes_intersect.append(cls)
+                    self.comboBox_class.addItems(classes_intersect)
                 else:
                     print("Startup failure")
             else:
@@ -147,11 +188,33 @@ class MyWindow(QMainWindow):
         pass
 
 
+
+
+    # - Interface - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+    def db_schema_classes(self):
+        if not self.weav_status:
+            print("Weaviate is offline")
+            return
+
+        schema = self.weavdb.get_schema()
+
+        classes = []
+
+        for class_name in schema['classes']:
+            classes.append(class_name['class'])
+
+        return classes
+    
+
+
+
     # - Query - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
     def get_filter(self):
         filter_where = self.textEdit_filter.toPlainText()
-        filter_class = self.lineEdit_class.text()
+        #filter_class = self.lineEdit_class.text()
+        filter_class = self.comboBox_class.currentText()
         filter_enable = self.checkBox_filter.isChecked()
         filter_json = json.loads(filter_where)
         return filter_class, filter_enable, filter_json
@@ -165,7 +228,8 @@ class MyWindow(QMainWindow):
         
 
         filter_enable = self.checkBox_filter.isChecked()
-        filter_class = self.lineEdit_class.text()
+        #filter_class = self.lineEdit_class.text()
+        filter_class = self.comboBox_class.currentText()
         
         print("Filter enable: ", filter_enable)
         
@@ -194,7 +258,8 @@ class MyWindow(QMainWindow):
         
         filter_class, filter_enable, filter_json = self.get_filter()
 
-        class_to_count = self.lineEdit_class.text()
+        #filter_class = self.lineEdit_class.text()
+        filter_class = self.comboBox_class.currentText()
         field_to_count = self.lineEdit_field.text()
 
         count = self.weavdb.objects_get_count_distinct(class_to_count, field_to_count, filter_json)
@@ -271,7 +336,8 @@ class MyWindow(QMainWindow):
             print("Weaviate is offline")
             return
 
-        filter_class = self.lineEdit_class.text()
+        #filter_class = self.lineEdit_class.text()
+        filter_class = self.comboBox_class.currentText()
         self.weavdb.clear_class(filter_class)
         print("Cleared class")
 
@@ -283,7 +349,6 @@ class MyWindow(QMainWindow):
             return
         
         from weav_db.schema import schema
-        
         classes = []
         class_objects = {}
         for weav_class in schema['classes']:

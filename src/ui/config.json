@@ -1,7 +1,7 @@
 {
     "credentials_path": "/home/icirauqui/wErkspace/evaluator/credentials_atlas.json",
     "work_dir": "/home/icirauqui/wErkspace/evaluator/workdir_gws",
-    "docker_compose_file_path": "/home/icirauqui/wErkspace/qteaviatif/src/weav_db/docker-compose.yml",
+    "docker_compose_file_path": "/home/icirauqui/workspace_atlas/qteaviatif/src/weav_db/docker-compose.yml",
     "mongo_db": {
         "address": "mongodb://localhost:27017/",
         "name": "evaluator_topperfloats",
