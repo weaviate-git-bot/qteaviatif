@@ -6,6 +6,15 @@ schema = {
             "description": "Contains a preprocessed email body, user_id and email_id",
             "properties": [
                 {
+                    "name": "graph_key",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
                     "name": "user_id",
                     "dataType": ["text"],
                     "moduleConfig": {
@@ -51,7 +60,20 @@ schema = {
                     }
                 },
                 {
+                    "name": "signature_available",
+                    "dataType": ["boolean"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
                     "name": "body_proc",
+                    "dataType": ["text"],
+                },
+                {
+                    "name": "signature",
                     "dataType": ["text"],
                 }
             ],
