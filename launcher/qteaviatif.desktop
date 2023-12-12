@@ -1,0 +1,7 @@
+[Desktop Entry]
+Name=Qteaviatif
+Exec=/home/icirauqui/workspace_atlas/qteaviatif/launcher/qteaviatif.sh
+Icon=/home/icirauqui/workspace_atlas/qteaviatif/launcher/weav_g.png
+Terminal=false
+Type=Application
+Categories=Utility;Development;

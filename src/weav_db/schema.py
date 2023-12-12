@@ -60,6 +60,15 @@ schema = {
                     }
                 },
                 {
+                    "name": "subject",
+                    "dataType": ["text"],
+                    "moduleConfig": {
+                        "text2vec-openai": {
+                            "skip": True
+                        }
+                    }
+                },
+                {
                     "name": "signature_available",
                     "dataType": ["boolean"],
                     "moduleConfig": {
